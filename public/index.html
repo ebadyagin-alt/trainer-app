@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Тренер — Управление клиентами</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,10 +11,10 @@
     <nav class="sidebar">
       <div class="logo">💪 Тренер</div>
       <ul class="nav-links">
-        <li><a href="#" data-tab="schedule" class="active">📅 Расписание</a></li>
-        <li><a href="#" data-tab="clients">👥 Клиенты</a></li>
-        <li><a href="#" data-tab="sessions">🏋️ Тренировки</a></li>
-        <li><a href="#" data-tab="payments">💰 Финансы</a></li>
+        <li><a href="#" data-tab="schedule" class="active"><span>📅</span><span class="nav-text"> Расписание</span></a></li>
+        <li><a href="#" data-tab="clients"><span>👥</span><span class="nav-text"> Клиенты</span></a></li>
+        <li><a href="#" data-tab="sessions"><span>🏋️</span><span class="nav-text"> Тренировки</span></a></li>
+        <li><a href="#" data-tab="payments"><span>💰</span><span class="nav-text"> Финансы</span></a></li>
       </ul>
     </nav>
 
@@ -258,6 +258,16 @@
       <div id="client-view-content"></div>
     </div>
   </div>
+
+  <!-- МОБИЛЬНАЯ НАВИГАЦИЯ -->
+  <nav class="mobile-nav">
+    <ul>
+      <li><a href="#" data-tab="schedule" class="active"><span class="nav-icon">📅</span>Расписание</a></li>
+      <li><a href="#" data-tab="clients"><span class="nav-icon">👥</span>Клиенты</a></li>
+      <li><a href="#" data-tab="sessions"><span class="nav-icon">🏋️</span>Тренировки</a></li>
+      <li><a href="#" data-tab="payments"><span class="nav-icon">💰</span>Финансы</a></li>
+    </ul>
+  </nav>
 
   <script src="app.js"></script>
 </body>

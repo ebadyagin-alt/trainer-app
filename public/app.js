@@ -36,18 +36,21 @@ function formatRu(dateStr) {
 function todayStr() { return formatDate(new Date()); }
 
 // ── TABS ─────────────────────────────────────────────────────────────────────
-document.querySelectorAll('.nav-links a').forEach(link => {
+function switchTab(tab) {
+  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll(`[data-tab="${tab}"]`).forEach(l => l.classList.add('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  if (tab === 'schedule') renderSchedule();
+  if (tab === 'clients') renderClients();
+  if (tab === 'sessions') renderSessions();
+  if (tab === 'payments') renderPayments();
+}
+
+document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
-    const tab = link.dataset.tab;
-    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    link.classList.add('active');
-    document.getElementById(`tab-${tab}`).classList.add('active');
-    if (tab === 'schedule') renderSchedule();
-    if (tab === 'clients') renderClients();
-    if (tab === 'sessions') renderSessions();
-    if (tab === 'payments') renderPayments();
+    switchTab(link.dataset.tab);
   });
 });
 
