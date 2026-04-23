@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3000/api/clients)",
+      "Bash(curl -s -X POST http://localhost:3000/api/clients -H \"Content-Type: application/json\" -d '{\"name\":\"Анна Петрова\",\"phone\":\"+7 900 123-45-67\",\"email\":\"anna@mail.ru\",\"goals\":\"Похудение, тонус\",\"notes\":\"Нет противопоказаний\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/clients -H \"Content-Type: application/json\" -d '{\"name\":\"Иван Козлов\",\"phone\":\"+7 911 987-65-43\",\"goals\":\"Набор мышечной массы\"}')",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(taskkill /PID 23064 /F)"
+    ]
+  }
+}

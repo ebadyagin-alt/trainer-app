@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой кабинет</title>
+  <link rel="stylesheet" href="client.css">
+</head>
+<body>
+  <div id="app-loading" class="loading-screen">
+    <div class="spinner"></div>
+    <p>Загрузка...</p>
+  </div>
+
+  <div id="app-error" class="error-screen" style="display:none">
+    <div class="error-icon">⚠️</div>
+    <h2>Ссылка недействительна</h2>
+    <p>Обратитесь к тренеру для получения новой ссылки.</p>
+  </div>
+
+  <div id="app" style="display:none">
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-logo">💪 Мой кабинет</div>
+        <div class="header-name" id="header-name"></div>
+      </div>
+    </header>
+
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="schedule">📅 Расписание</button>
+      <button class="tab-btn" data-tab="sessions">🏋️ Тренировки</button>
+      <button class="tab-btn" data-tab="payments">💰 Платежи</button>
+    </nav>
+
+    <main class="main">
+
+      <!-- РАСПИСАНИЕ -->
+      <section id="tab-schedule" class="tab active">
+        <div class="section-header">
+          <h2>Мои записи</h2>
+          <button class="btn btn-primary" id="btn-book">+ Записаться</button>
+        </div>
+        <div id="schedule-list"></div>
+      </section>
+
+      <!-- ТРЕНИРОВКИ -->
+      <section id="tab-sessions" class="tab">
+        <h2 class="section-title">История тренировок</h2>
+        <div id="sessions-list"></div>
+      </section>
+
+      <!-- ПЛАТЕЖИ -->
+      <section id="tab-payments" class="tab">
+        <h2 class="section-title">Мои платежи</h2>
+        <div id="payments-list"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- МОДАЛКА ЗАПИСИ -->
+  <div class="modal-overlay" id="modal-book">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Записаться к тренеру</h2>
+        <button class="modal-close" id="btn-close-book">&times;</button>
+      </div>
+      <form id="form-book">
+        <div class="form-group">
+          <label>Дата *</label>
+          <input type="date" id="book-date" required>
+        </div>
+        <div class="form-group">
+          <label>Время *</label>
+          <input type="time" id="book-time" required>
+        </div>
+        <div class="form-group">
+          <label>Длительность (мин)</label>
+          <select id="book-duration" class="select-input">
+            <option value="30">30 минут</option>
+            <option value="45">45 минут</option>
+            <option value="60" selected>60 минут</option>
+            <option value="90">90 минут</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Пожелания</label>
+          <textarea id="book-notes" rows="2" placeholder="Что хотите проработать?"></textarea>
+        </div>
+        <p class="hint">Тренер подтвердит запись в ближайшее время.</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="btn-cancel-book">Отмена</button>
+          <button type="submit" class="btn btn-primary">Отправить запрос</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>

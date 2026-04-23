@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тренер — Управление клиентами</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <nav class="sidebar">
+      <div class="logo">💪 Тренер</div>
+      <ul class="nav-links">
+        <li><a href="#" data-tab="schedule" class="active">📅 Расписание</a></li>
+        <li><a href="#" data-tab="clients">👥 Клиенты</a></li>
+        <li><a href="#" data-tab="sessions">🏋️ Тренировки</a></li>
+        <li><a href="#" data-tab="payments">💰 Финансы</a></li>
+      </ul>
+    </nav>
+
+    <main class="content">
+
+      <!-- РАСПИСАНИЕ -->
+      <section id="tab-schedule" class="tab active">
+        <div class="page-header">
+          <h1>Расписание</h1>
+          <button class="btn btn-primary" id="btn-add-appointment">+ Новая запись</button>
+        </div>
+        <div class="week-nav">
+          <button class="btn btn-ghost" id="btn-prev-week">&#8249; Назад</button>
+          <span id="week-label"></span>
+          <button class="btn btn-ghost" id="btn-next-week">Вперёд &#8250;</button>
+        </div>
+        <div class="schedule-grid" id="schedule-grid"></div>
+      </section>
+
+      <!-- КЛИЕНТЫ -->
+      <section id="tab-clients" class="tab">
+        <div class="page-header">
+          <h1>Клиенты</h1>
+          <button class="btn btn-primary" id="btn-add-client">+ Добавить клиента</button>
+        </div>
+        <input type="text" class="search-input" id="client-search" placeholder="Поиск по имени...">
+        <div class="cards-grid" id="clients-list"></div>
+      </section>
+
+      <!-- ТРЕНИРОВКИ -->
+      <section id="tab-sessions" class="tab">
+        <div class="page-header">
+          <h1>История тренировок</h1>
+          <button class="btn btn-primary" id="btn-add-session">+ Добавить тренировку</button>
+        </div>
+        <div class="filter-row">
+          <select id="session-filter-client" class="select-input">
+            <option value="">Все клиенты</option>
+          </select>
+        </div>
+        <div id="sessions-list" class="sessions-list"></div>
+      </section>
+
+      <!-- ФИНАНСЫ -->
+      <section id="tab-payments" class="tab">
+        <div class="page-header">
+          <h1>Финансы</h1>
+          <button class="btn btn-primary" id="btn-add-payment">+ Добавить платёж</button>
+        </div>
+        <div class="stats-row" id="payment-stats"></div>
+        <div id="payments-list" class="table-wrapper">
+          <table class="data-table" id="payments-table">
+            <thead>
+              <tr>
+                <th>Клиент</th><th>Сумма</th><th>Дата</th><th>Описание</th><th>Статус</th><th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- МОДАЛКИ -->
+
+  <!-- Клиент -->
+  <div class="modal-overlay" id="modal-client">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-client-title">Клиент</h2>
+        <button class="modal-close" data-close="modal-client">&times;</button>
+      </div>
+      <form id="form-client">
+        <input type="hidden" id="client-id">
+        <div class="form-group">
+          <label>Имя *</label>
+          <input type="text" id="client-name" required placeholder="Иванов Иван">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Телефон</label>
+            <input type="tel" id="client-phone" placeholder="+7 900 000-00-00">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="client-email" placeholder="ivan@mail.ru">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Цели</label>
+          <input type="text" id="client-goals" placeholder="Похудение, набор массы...">
+        </div>
+        <div class="form-group">
+          <label>Заметки</label>
+          <textarea id="client-notes" rows="3" placeholder="Противопоказания, пожелания..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close="modal-client">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Запись -->
+  <div class="modal-overlay" id="modal-appointment">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-appt-title">Запись</h2>
+        <button class="modal-close" data-close="modal-appointment">&times;</button>
+      </div>
+      <form id="form-appointment">
+        <input type="hidden" id="appt-id">
+        <div class="form-group">
+          <label>Клиент *</label>
+          <select id="appt-client" required class="select-input"></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Дата *</label>
+            <input type="date" id="appt-date" required>
+          </div>
+          <div class="form-group">
+            <label>Время *</label>
+            <input type="time" id="appt-time" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Длительность (мин)</label>
+            <input type="number" id="appt-duration" value="60" min="15" step="15">
+          </div>
+          <div class="form-group">
+            <label>Статус</label>
+            <select id="appt-status" class="select-input">
+              <option value="scheduled">Подтверждено</option>
+              <option value="pending">Ожидает подтверждения</option>
+              <option value="done">Проведено</option>
+              <option value="cancelled">Отменено</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Заметки</label>
+          <textarea id="appt-notes" rows="2" placeholder="Дополнительная информация..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close="modal-appointment">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Тренировка -->
+  <div class="modal-overlay" id="modal-session">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2>Тренировка</h2>
+        <button class="modal-close" data-close="modal-session">&times;</button>
+      </div>
+      <form id="form-session">
+        <input type="hidden" id="session-id">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Клиент *</label>
+            <select id="session-client" required class="select-input"></select>
+          </div>
+          <div class="form-group">
+            <label>Дата *</label>
+            <input type="date" id="session-date" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Упражнения</label>
+          <div id="exercises-list"></div>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-add-exercise">+ Добавить упражнение</button>
+        </div>
+        <div class="form-group">
+          <label>Заметки</label>
+          <textarea id="session-notes" rows="2" placeholder="Комментарии к тренировке..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close="modal-session">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Платёж -->
+  <div class="modal-overlay" id="modal-payment">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-payment-title">Платёж</h2>
+        <button class="modal-close" data-close="modal-payment">&times;</button>
+      </div>
+      <form id="form-payment">
+        <input type="hidden" id="payment-id">
+        <div class="form-group">
+          <label>Клиент *</label>
+          <select id="payment-client" required class="select-input"></select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Сумма (₽) *</label>
+            <input type="number" id="payment-amount" required min="0" step="100" placeholder="3000">
+          </div>
+          <div class="form-group">
+            <label>Дата *</label>
+            <input type="date" id="payment-date" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Описание</label>
+          <input type="text" id="payment-description" placeholder="Абонемент на месяц, разовое занятие...">
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="payment-paid">
+            Оплачено
+          </label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close="modal-payment">Отмена</button>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Карточка клиента -->
+  <div class="modal-overlay" id="modal-client-view">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h2 id="client-view-name"></h2>
+        <button class="modal-close" data-close="modal-client-view">&times;</button>
+      </div>
+      <div id="client-view-content"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
