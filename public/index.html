@@ -6,7 +6,6 @@
   <title>Тренер — Управление клиентами</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="/manifest.json">
-  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Тренер">
@@ -22,7 +21,12 @@
         <li><a href="#" data-tab="clients"><span>👥</span><span class="nav-text"> Клиенты</span></a></li>
         <li><a href="#" data-tab="sessions"><span>🏋️</span><span class="nav-text"> Тренировки</span></a></li>
         <li><a href="#" data-tab="payments"><span>💰</span><span class="nav-text"> Финансы</span></a></li>
+        <li id="nav-trainers" style="display:none"><a href="#" data-tab="trainers"><span>👤</span><span class="nav-text"> Тренеры</span></a></li>
       </ul>
+      <div class="sidebar-footer">
+        <div class="trainer-pill" id="sidebar-trainer-name"></div>
+        <button class="btn-logout" id="btn-logout" title="Выйти">⏻</button>
+      </div>
     </nav>
 
     <main class="content">
@@ -84,6 +88,15 @@
         </div>
       </section>
 
+      <!-- ТРЕНЕРЫ (только для admin) -->
+      <section id="tab-trainers" class="tab">
+        <div class="page-header">
+          <h1>Тренеры</h1>
+          <button class="btn btn-primary" id="btn-add-trainer">+ Добавить тренера</button>
+        </div>
+        <div id="trainers-list" class="cards-grid"></div>
+      </section>
+
     </main>
   </div>
 
@@ -119,6 +132,12 @@
         <div class="form-group">
           <label>Заметки</label>
           <textarea id="client-notes" rows="3" placeholder="Противопоказания, пожелания..."></textarea>
+        </div>
+        <div class="form-group" id="client-trainer-group" style="display:none">
+          <label>Тренер</label>
+          <select id="client-trainer" class="select-input">
+            <option value="">— Не назначен —</option>
+          </select>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-ghost" data-close="modal-client">Отмена</button>
@@ -182,7 +201,7 @@
   <div class="modal-overlay" id="modal-session">
     <div class="modal modal-wide">
       <div class="modal-header">
-        <h2>Тренировка</h2>
+        <h2 id="modal-session-title">Тренировка</h2>
         <button class="modal-close" data-close="modal-session">&times;</button>
       </div>
       <form id="form-session">
@@ -198,13 +217,21 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Упражнения</label>
+          <div class="template-bar">
+            <label>Упражнения</label>
+            <div class="template-actions">
+              <select id="session-template-select" class="select-input select-sm">
+                <option value="">Загрузить шаблон...</option>
+              </select>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-save-template">💾 Сохранить как шаблон</button>
+            </div>
+          </div>
           <div id="exercises-list"></div>
-          <button type="button" class="btn btn-ghost btn-sm" id="btn-add-exercise">+ Добавить упражнение</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-add-exercise" style="margin-top:8px">+ Добавить упражнение</button>
         </div>
         <div class="form-group">
-          <label>Заметки</label>
-          <textarea id="session-notes" rows="2" placeholder="Комментарии к тренировке..."></textarea>
+          <label>Заметки о тренировке</label>
+          <textarea id="session-notes" rows="2" placeholder="Общие комментарии к тренировке..."></textarea>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-ghost" data-close="modal-session">Отмена</button>
@@ -266,6 +293,41 @@
     </div>
   </div>
 
+  <!-- Добавить тренера -->
+  <div class="modal-overlay" id="modal-trainer">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Новый тренер</h2>
+        <button class="modal-close" data-close="modal-trainer">&times;</button>
+      </div>
+      <form id="form-trainer">
+        <div class="form-group">
+          <label>Имя *</label>
+          <input type="text" id="trainer-name" required placeholder="Иванов Иван">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="trainer-email" required placeholder="trainer@example.com">
+        </div>
+        <div class="form-group">
+          <label>Пароль *</label>
+          <input type="password" id="trainer-password" required placeholder="Минимум 6 символов" minlength="6">
+        </div>
+        <div class="form-group">
+          <label>Роль</label>
+          <select id="trainer-role" class="select-input">
+            <option value="trainer">Тренер</option>
+            <option value="admin">Администратор</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" data-close="modal-trainer">Отмена</button>
+          <button type="submit" class="btn btn-primary">Создать</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- МОБИЛЬНАЯ НАВИГАЦИЯ -->
   <nav class="mobile-nav">
     <ul>
@@ -273,6 +335,7 @@
       <li><a href="#" data-tab="clients"><span class="nav-icon">👥</span>Клиенты</a></li>
       <li><a href="#" data-tab="sessions"><span class="nav-icon">🏋️</span>Тренировки</a></li>
       <li><a href="#" data-tab="payments"><span class="nav-icon">💰</span>Финансы</a></li>
+      <li id="mobile-nav-trainers" style="display:none"><a href="#" data-tab="trainers"><span class="nav-icon">👤</span>Тренеры</a></li>
     </ul>
   </nav>
 
