@@ -82,7 +82,8 @@ body {
   margin-left: 220px;
   flex: 1;
   padding: 32px;
-  max-width: 1200px;
+  min-width: 0;
+  width: calc(100% - 220px);
 }
 
 .tab { display: none; }
@@ -272,9 +273,13 @@ select option { background: var(--bg3); }
 
 .client-card-actions {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 14px;
 }
+
+.client-card-actions .btn-sm { white-space: nowrap; }
+.client-card-actions .btn-icon { flex-shrink: 0; }
 
 /* ── SESSIONS LIST ── */
 .filter-row { margin-bottom: 20px; }
@@ -552,7 +557,7 @@ select option { background: var(--bg3); }
   .logo { font-size: 22px; padding: 16px 0 24px; text-align: center; }
   .nav-links a { padding: 14px 0; justify-content: center; font-size: 20px; }
   .nav-links a .nav-text { display: none; }
-  .content { margin-left: 72px; padding: 24px 20px; }
+  .content { margin-left: 72px; padding: 24px 20px; width: calc(100% - 72px); }
   .schedule-grid { grid-template-columns: repeat(4, 1fr); }
   .exercise-row { grid-template-columns: 1fr 60px 60px 60px auto; }
 }
