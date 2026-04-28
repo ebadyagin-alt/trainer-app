@@ -55,6 +55,28 @@ function adminOnly(req, res, next) {
   next();
 }
 
+// ── CLIENT PORTAL API (unprotected — before auth middleware) ─────────────────
+app.get('/api/portal/:token', async (req, res) => {
+  const client = await db.getClientByToken(req.params.token);
+  if (!client) return res.status(404).json({ error: 'Ссылка недействительна' });
+  const [appointments, sessions, payments] = await Promise.all([
+    db.getClientAppointments(client.id),
+    db.getSessions(client.id, null),
+    db.getPayments(client.id, null)
+  ]);
+  res.json({ client, appointments, sessions, payments });
+});
+
+app.post('/api/portal/:token/appointments', async (req, res) => {
+  const client = await db.getClientByToken(req.params.token);
+  if (!client) return res.status(404).json({ error: 'Ссылка недействительна' });
+  const { date, time, duration, notes } = req.body;
+  if (!date || !time) return res.status(400).json({ error: 'Дата и время обязательны' });
+  res.status(201).json(await db.createAppointment({
+    client_id: client.id, date, time, duration, status: 'pending', notes
+  }));
+});
+
 app.use('/api', auth);
 
 // ── ME ────────────────────────────────────────────────────────────────────────
@@ -201,28 +223,6 @@ app.post('/api/templates', async (req, res) => {
 app.delete('/api/templates/:id', async (req, res) => {
   await db.deleteTemplate(req.params.id);
   res.json({ ok: true });
-});
-
-// ── CLIENT PORTAL API (unprotected) ──────────────────────────────────────────
-app.get('/api/portal/:token', async (req, res) => {
-  const client = await db.getClientByToken(req.params.token);
-  if (!client) return res.status(404).json({ error: 'Ссылка недействительна' });
-  const [appointments, sessions, payments] = await Promise.all([
-    db.getClientAppointments(client.id),
-    db.getSessions(client.id, null),
-    db.getPayments(client.id, null)
-  ]);
-  res.json({ client, appointments, sessions, payments });
-});
-
-app.post('/api/portal/:token/appointments', async (req, res) => {
-  const client = await db.getClientByToken(req.params.token);
-  if (!client) return res.status(404).json({ error: 'Ссылка недействительна' });
-  const { date, time, duration, notes } = req.body;
-  if (!date || !time) return res.status(400).json({ error: 'Дата и время обязательны' });
-  res.status(201).json(await db.createAppointment({
-    client_id: client.id, date, time, duration, status: 'pending', notes
-  }));
 });
 
 app.get('/client/:token', (req, res) => {
