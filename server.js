@@ -241,6 +241,10 @@ const PORT = process.env.PORT || 3000;
 db.init().then(() => {
   app.listen(PORT, () => console.log(`Сервер запущен: http://localhost:${PORT}`));
 }).catch(err => {
-  console.error('Ошибка подключения к БД:', err.message);
+  console.error('Ошибка подключения к БД:');
+  console.error('  message:', err.message);
+  console.error('  code:', err.code);
+  console.error('  detail:', err.detail);
+  console.error('  stack:', err.stack);
   process.exit(1);
 });
