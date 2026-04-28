@@ -8,7 +8,12 @@
       "Bash(curl -s -X POST http://localhost:3000/api/clients -H \"Content-Type: application/json\" -d '{\"name\":\"Иван Козлов\",\"phone\":\"+7 911 987-65-43\",\"goals\":\"Набор мышечной массы\"}')",
       "Bash(curl -s http://localhost:3000/)",
       "Bash(taskkill /PID 23064 /F)",
-      "Bash(node generate-icons.js)"
+      "Bash(node generate-icons.js)",
+      "WebFetch(domain:design4users.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s https://raw.githubusercontent.com/alirezarezvani/claude-skills/main/engineering-team/senior-frontend/SKILL.md)",
+      "WebFetch(domain:dribbble.com)"
     ]
   }
 }

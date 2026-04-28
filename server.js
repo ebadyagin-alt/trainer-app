@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('./database');
@@ -8,11 +9,18 @@ const db = require('./database');
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'trainer-jwt-secret-2024';
 
+// Serve from dist/ (React build) if it exists, otherwise fall back to public/
+const distDir = path.join(__dirname, 'dist');
+const publicDir = path.join(__dirname, 'public');
+const useReact = fs.existsSync(distDir) && fs.existsSync(path.join(distDir, 'index.html'));
+const staticDir = useReact ? distDir : publicDir;
+
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(staticDir));
 
 // ── AUTH ROUTES (unprotected) ─────────────────────────────────────────────────
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+// For the React SPA, all non-API routes serve index.html (client-side routing)
+app.get('/login', (req, res) => res.sendFile(path.join(staticDir, 'index.html')));
 
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
@@ -218,7 +226,13 @@ app.post('/api/portal/:token/appointments', async (req, res) => {
 });
 
 app.get('/client/:token', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'client.html'));
+  res.sendFile(path.join(staticDir, 'index.html'));
+});
+
+// Catch-all: serve the SPA for any non-API route (React Router handles client-side routing)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) return next();
+  res.sendFile(path.join(staticDir, 'index.html'));
 });
 
 // ─────────────────────────────────────────────────────────────────────────────

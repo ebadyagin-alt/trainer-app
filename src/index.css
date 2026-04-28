@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Inter', 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+    background-color: #0a0c10;
+    background-image:
+      radial-gradient(1200px 600px at 85% -10%, rgba(255, 61, 138, 0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(212, 255, 58, 0.08), transparent 60%);
+    background-attachment: fixed;
+    color: #f4f6fb;
+    min-height: 100vh;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #353b54;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5b647d;
+  }
+
+  input[type='date']::-webkit-calendar-picker-indicator,
+  input[type='time']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+  }
+
+  ::placeholder {
+    color: #5b647d;
+  }
+
+  select option {
+    background: #1c2030;
+    color: #f4f6fb;
+  }
+}
+
+@layer components {
+  .input-base {
+    @apply w-full bg-bg3 border border-border rounded-[12px] px-4 py-3 text-text1 text-sm font-sans outline-none transition-all duration-200;
+  }
+  .input-base:focus {
+    @apply border-primary bg-bg-elevated;
+    box-shadow: 0 0 0 4px rgba(212, 255, 58, 0.12);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-[11px] rounded-[12px] bg-primary text-on-primary text-[13px] font-bold uppercase tracking-wide transition-all duration-200 cursor-pointer border-none;
+    box-shadow: 0 8px 28px rgba(212, 255, 58, 0.22);
+  }
+  .btn-primary:hover {
+    @apply bg-primary-hover -translate-y-0.5;
+    box-shadow: 0 12px 32px rgba(212, 255, 58, 0.35);
+  }
+  .btn-primary:active {
+    @apply translate-y-0;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-[11px] rounded-[12px] bg-bg3 text-text1 text-[13px] font-bold uppercase tracking-wide border border-border transition-all duration-200 cursor-pointer;
+  }
+  .btn-ghost:hover {
+    @apply border-border-strong bg-bg-elevated -translate-y-0.5;
+  }
+
+  .btn-sm {
+    @apply px-[14px] py-[7px] text-[11px] rounded-[9px];
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-[9px] bg-transparent border border-border text-text2 text-sm transition-all duration-200 cursor-pointer;
+  }
+  .btn-icon:hover {
+    @apply text-text1 bg-bg-elevated border-border-strong;
+  }
+
+  .card {
+    @apply bg-bg2 border border-border rounded-[16px] transition-all duration-200;
+  }
+  .card:hover {
+    @apply border-border-strong;
+  }
+
+  .badge-paid {
+    @apply inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider;
+    background: rgba(45, 212, 164, 0.14);
+    color: #2dd4a4;
+  }
+  .badge-unpaid {
+    @apply inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider;
+    background: rgba(255, 77, 109, 0.14);
+    color: #ff4d6d;
+  }
+
+  .form-label {
+    @apply block text-[11px] text-text2 mb-[7px] font-bold uppercase tracking-[0.06em];
+  }
+
+  .modal-overlay {
+    @apply fixed inset-0 z-[100] flex items-center justify-center p-5;
+    background: rgba(5, 7, 11, 0.78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn 0.2s ease;
+  }
+
+  @media (max-width: 640px) {
+    .modal-overlay {
+      @apply items-end p-0;
+    }
+  }
+}
